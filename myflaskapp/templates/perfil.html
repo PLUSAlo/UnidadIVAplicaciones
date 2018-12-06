@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>{{session.username}}</h1>
+  <small>User with email {{user.email}}, perfil create on {{user.register_date}}</small>
+  <hr>
+  <div>
+    {{user.name | safe}}
+  </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+cd \xampp\
+cd mysql\bin
+mysql -uroot -p
+
+USE myflaskapp;
+DESCRIBE DATABASE;
+DESCRIBE users;
+SHOW TABLES;

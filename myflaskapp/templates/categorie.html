@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>{{categorie.name}}</h1>
+  <hr>
+  <div>
+    {{categorie.description | safe}}
+  </div>
+{% endblock %}

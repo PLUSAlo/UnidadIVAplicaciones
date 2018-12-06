@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <a class="btn btn-success" href="/add_categorie"> Add Categorie</a>
+  <hr>
+  <table class="table table-striped">
+    <tr>
+      <th colspan="5"><h4>Categories of Articles</h4></th>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+    </tr>
+    {% for categorie in categories %}
+      <tr>
+        <td>{{categorie.id}}</td>
+        <td>{{categorie.name}}</td>
+        <td>{{categorie.description}}</td>
+        <td><a href="edit_categorie/{{categorie.id}}" class="btn btn-default pull-right">Edit</a></td>
+        <td>
+          <form action="{{url_for('delete_categorie', id=categorie.id)}}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete" class="btn btn-danger">
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

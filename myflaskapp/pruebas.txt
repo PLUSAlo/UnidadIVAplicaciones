@@ -1,0 +1,113 @@
+<div class="form-group">
+      <select name="categorie">
+         {% for categorie in categories %}
+         <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+         {% endfor %}
+      </select>
+    </div>
+
+
+@app.route('/add_prueba')
+def add_prueba(): 
+    conn = mysql.connect()
+    cur =conn.cursor(pymysql.cursors.DictCursor)
+    result = cur.execute("SELECT id, name FROM categories")
+
+    categories = cur.fetchall()
+    return render_template('add_prueba.html', categories=categories)
+
+
+
+# Add Article
+@app.route('/add_article', methods=['GET', 'POST'])
+@is_logged_in
+def add_article():
+    form = ArticleForm(request.form)
+    if request.method == 'POST' and form.validate():
+        global categories
+        title = form.title.data
+        body = form.body.data
+        categorie = form.categorie.data
+
+        # Create Cursor
+        conn = mysql.connect()
+        cur =conn.cursor(pymysql.cursors.DictCursor)
+
+
+        cur.execute("SELECT * FROM categories")
+        categories = cur.fetchall()
+
+        # Execute
+        cur.execute("INSERT INTO articles(id_categorie, title, body, author) VALUES(%s, %s, %s, %s)",(categorie, title, body, session['username']))
+
+        # Commit to DB
+        conn.commit()
+
+        #Close connection
+        cur.close()
+
+        flash('Article Created', 'success')
+
+        return redirect(url_for('dashboard_articles'))
+
+    return render_template('add_article.html', form=form, categories=categories)
+
+
+
+
+CREATE TABLE articles (id INT(11) AUTO_INCREMENT PRIMARY KEY, id_categories INT(11), title VARCHAR(255), author VARCHAR(100), body TEXT, create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(id_categories) REFERENCES categories(id));
+
+
+
+
+# Article Form Class
+class ArticleForm(Form):
+    title = StringField('Title', [validators.Length(min=1, max=200)])
+    body = TextAreaField('Body', [validators.Length(min=30)])
+    categorie = SelectField('Categorie')
+
+
+
+
+
+# Add Article
+@app.route('/add_prueba', methods=['GET', 'POST'])
+@is_logged_in
+def add_prueba():
+    form = ArticleForm(request.form)
+    if request.method == 'POST' and form.validate():
+        title = form.title.data
+        body = form.body.data
+        categorie = form.categorie.data
+
+        # Create Cursor
+        conn = mysql.connect()
+        cur =conn.cursor(pymysql.cursors.DictCursor)
+
+
+        result = cur.execute("SELECT id, name FROM categories")
+        categories = cur.fetchall()
+
+        # Execute
+        cur.execute("INSERT INTO articles(id_categorie, title, body, author) VALUES(%s, %s, %s, %s)",(title, body, session['username']))
+
+        # Commit to DB
+        conn.commit()
+
+        #Close connection
+        cur.close()
+
+        flash('Article Created', 'success')
+
+        return redirect(url_for('dashboard_articles'))
+
+    return render_template('add_article.html', form=form)
+
+@app.route('/add_prueba')
+def add_prueba(): 
+    conn = mysql.connect()
+    cur =conn.cursor(pymysql.cursors.DictCursor)
+    result = cur.execute("SELECT id, name FROM categories")
+
+    categories = cur.fetchall()
+return render_template('add_prueba.html', categories=categories)

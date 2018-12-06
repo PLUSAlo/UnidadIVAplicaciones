@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MyFlaskApp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    {% include 'includes/_navbar.html' %}
+    <div class="container">
+      {% include 'includes/_messages.html' %}
+      {% block body %}
+        <div class="jumbotron text-center">
+          <h1>Bienvenido a mi Aplicacion con Python</h1>
+            <p class="lead">En esta aplicacion con es desarrollada con Python y esta enfocada en la creacion de articulos.</p>
+      {% if session.logged_in == NULL %}
+        <a href="/register" class="btn btn-primary btn-lg">Register</a>
+        <a href="/login" class="btn btn-success btn-lg">Login</a>
+      {% else %}
+        <a class="btn btn-success" href="/add_categorie"> Add Categorie</a>
+        <a class="btn btn-success" href="/add_article"> Add Article</a>
+      {% endif %}
+    </div>
+      {% endblock %}
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
+    <script type="text/javascript">
+      CKEDITOR.replace('editor')
+    </script>
+  </body>
+</html>
